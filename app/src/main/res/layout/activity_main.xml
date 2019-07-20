@@ -7,51 +7,10 @@
     android:orientation="vertical"
     tools:context="com.keepsolid.ksinternshiphomework.MainActivity">
 
-    <EditText
-        android:id="@+id/first"
+
+    <fragment
+        android:id="@+id/fragment_main"
+        android:name="com.keepsolid.ksinternshiphomework.MainFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:ems="10"
-        android:hint="@string/firstname"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/last"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:ems="10"
-        android:hint="@string/lastname"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:ems="5"
-        android:hint="@string/age"
-        android:inputType="numberDecimal" />
-
-    <Button
-        android:id="@+id/send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="@string/send"
-        android:onClick="onSend"/>
-
-    <TextView
-        android:id="@+id/errormsg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:textColor="#F44336" />
+        android:layout_height="match_parent" />
 </LinearLayout>

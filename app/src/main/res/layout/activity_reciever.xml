@@ -7,22 +7,10 @@
     android:orientation="vertical"
     tools:context="com.keepsolid.ksinternshiphomework.RecieverActivity">
 
-    <TextView
-        android:id="@+id/show"
+    <fragment
+        android:id="@+id/fragment_receiver"
+        android:name="com.keepsolid.ksinternshiphomework.ReceiverFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:text="TextView"
-        android:textSize="16sp" />
+        android:layout_height="match_parent" />
 
-    <Button
-        android:id="@+id/exit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/exit"
-        android:onClick="onExitClick"/>
 </LinearLayout>

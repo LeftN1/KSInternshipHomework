@@ -6,12 +6,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ReceiverFragment extends Fragment {
+
+    private TextView showHumanView;
+    private Button exitButton;
 
 
     public ReceiverFragment() {
@@ -22,8 +27,22 @@ public class ReceiverFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_receiver, container, false);
+        View v = inflater.inflate(R.layout.fragment_receiver, container, false);
+        showHumanView = v.findViewById(R.id.show);
+        exitButton = v.findViewById(R.id.exit);
+        int i = 0;
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    getActivity().finish();
+            }
+        });
+
+        return v;
+    }
+
+    public void showData(Human human){
+        showHumanView.setText(human.toString());
     }
 
 }
