@@ -23,6 +23,7 @@ public class MainFragment extends Fragment {
     private Button sendButton;
     private TextView errMsgView;
 
+
     private Human human;
     private SendHuman sendHuman;
 
@@ -66,16 +67,16 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        sendHuman = (SendHuman) context;
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         firstTxt.setText("");
         lastTxt.setText("");
         ageTxt.setText("");
     }
+
+    public void setSendHuman(SendHuman sendHuman){
+        this.sendHuman = sendHuman;
+    }
+
+
 }

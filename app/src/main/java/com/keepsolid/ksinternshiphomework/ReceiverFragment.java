@@ -18,7 +18,6 @@ public class ReceiverFragment extends Fragment {
     private TextView showHumanView;
     private Button exitButton;
 
-
     public ReceiverFragment() {
         // Required empty public constructor
     }
@@ -30,7 +29,7 @@ public class ReceiverFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_receiver, container, false);
         showHumanView = v.findViewById(R.id.show);
         exitButton = v.findViewById(R.id.exit);
-        int i = 0;
+
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,4 +44,7 @@ public class ReceiverFragment extends Fragment {
         showHumanView.setText(human.toString());
     }
 
+    public void buttonOff(){
+        exitButton.setVisibility(View.INVISIBLE);
+    }
 }

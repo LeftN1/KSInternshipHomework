@@ -6,11 +6,12 @@ import android.os.Bundle;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements SendHuman {
+public class MainActivity extends AppCompatActivity{
 
     private MainFragment mainFragment;
     private ReceiverFragment receiverFragment;
-    private boolean inLandscapeMode;
+    public boolean inLandscapeMode;
+    private SendHuman sendHuman;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,23 +22,25 @@ public class MainActivity extends AppCompatActivity implements SendHuman {
         mainFragment = (MainFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_main);
         if(inLandscapeMode){
             receiverFragment = (ReceiverFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_receiver);
-            Objects.requireNonNull(getSupportActionBar()).hide();
+            receiverFragment.buttonOff();
         }
 
+        sendHuman = new SendHuman() {
+            @Override
+            public void onSend(Human human) {
+                if (inLandscapeMode) {
+                    receiverFragment.showData(human);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, RecieverActivity.class);
+                    intent.putExtra("first", human.getFirstName());
+                    intent.putExtra("last", human.getLastName());
+                    intent.putExtra("age", human.getAge());
+                    startActivity(intent);
+                }
+            }
+        };
+
+        mainFragment.setSendHuman(sendHuman);
+
     }
-
-    @Override
-    public void onSend(Human human) {
-
-        if (inLandscapeMode) {
-            receiverFragment.showData(human);
-        } else {
-            Intent intent = new Intent(MainActivity.this, RecieverActivity.class);
-            intent.putExtra("first", human.getFirstName());
-            intent.putExtra("last", human.getLastName());
-            intent.putExtra("age", human.getAge());
-            startActivity(intent);
-        }
-    }
-
 }
