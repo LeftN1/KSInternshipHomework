@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 public class RecieverActivity extends AppCompatActivity{
 
-    private Human human;
+    private PurchaseItem item;
     private ReceiverFragment receiverFragment;
     private Intent intent;
 
@@ -17,15 +17,13 @@ public class RecieverActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         intent = getIntent();
-        String first = intent.getStringExtra("first");
-        String last = intent.getStringExtra("last");
-        int age = intent.getIntExtra("age",0);
-        human = new Human(first, last, age);
+        String details = intent.getStringExtra("details");
+
 
         setContentView(R.layout.activity_reciever);
 
         receiverFragment = (ReceiverFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_receiver);
-        receiverFragment.showData(human);
+        receiverFragment.showData(details);
 
     }
 

@@ -1,15 +1,20 @@
 package com.keepsolid.ksinternshiphomework;
 
 
-import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.support.design.widget.FloatingActionButton;
+
+
+import java.util.ArrayList;
 
 
 /**
@@ -17,49 +22,56 @@ import android.widget.TextView;
  */
 public class MainFragment extends Fragment {
 
-    private EditText firstTxt;
-    private EditText lastTxt;
-    private EditText ageTxt;
-    private Button sendButton;
-    private TextView errMsgView;
+    private Toolbar toolbar;
+    private RecyclerView recyclerView;
+    ArrayList <PurchaseItem> items;
+    PurchaseAdapter adapter;
+    FloatingActionButton btn;
 
-
-    private Human human;
-    private SendHuman sendHuman;
+    private SendItem sendItem;
 
     public MainFragment() {
         // Required empty public constructor
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
 
-        firstTxt = v.findViewById(R.id.first);
-        lastTxt = v.findViewById(R.id.last);
-        ageTxt = v.findViewById(R.id.age);
+        toolbar = v.findViewById(R.id.toolbar);
+        toolbar.setTitle("Список покупок");
 
-        sendButton = v.findViewById(R.id.send_bttn);
-        errMsgView = v.findViewById(R.id.errormsg);
+        recyclerView = v.findViewById(R.id.rv_recycler);
+        btn = v.findViewById(R.id.fab_add);
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        items = new ArrayList<>();
+
+        boolean checker;
+        for (int i = 0; i < 100; i++){
+
+            checker = (Math.random() > 0.4) ? false : true;
+
+            items.add(new PurchaseItem(checker, "покупка " + i, Units.PCS, Math.random(), Math.random()*10, "Lorem ipsum ist dolore " + i ));
+        }
+
+        adapter = new PurchaseAdapter(items, v.getContext());
+
+        adapter.setListener(new OnPurchaseItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                sendItem.onSend(adapter.getItems().get(position));
+            }
+        });
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
+        recyclerView.setAdapter(adapter);
+
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String first = firstTxt.getText().toString();
-                String last = lastTxt.getText().toString();
-                boolean isCorrect = !first.isEmpty() && !last.isEmpty() && !ageTxt.getText().toString().isEmpty();
 
-                if(isCorrect){
-                    errMsgView.setText("");
-                    int age = Integer.parseInt(ageTxt.getText().toString());
-                    errMsgView.setText("");
-                    int a = 2;
-                    human = new Human(first, last, age);
-                    sendHuman.onSend(human);
-                } else {
-                    errMsgView.setText("All fields must be non-empty.");
-                }
             }
         });
 
@@ -69,13 +81,10 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        firstTxt.setText("");
-        lastTxt.setText("");
-        ageTxt.setText("");
     }
 
-    public void setSendHuman(SendHuman sendHuman){
-        this.sendHuman = sendHuman;
+    public void setSendItem(SendItem sendItem){
+        this.sendItem = sendItem;
     }
 
 

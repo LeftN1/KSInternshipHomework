@@ -13,12 +13,12 @@
         android:name="com.keepsolid.ksinternshiphomework.MainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.7" />
+        android:layout_weight="0.5" />
 
     <fragment
         android:id="@+id/fragment_receiver"
         android:name="com.keepsolid.ksinternshiphomework.ReceiverFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.3" />
+        android:layout_weight="0.5" />
 </LinearLayout>

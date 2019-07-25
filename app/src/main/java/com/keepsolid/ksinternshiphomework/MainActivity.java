@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import java.util.Objects;
-
 public class MainActivity extends AppCompatActivity{
 
     private MainFragment mainFragment;
     private ReceiverFragment receiverFragment;
     public boolean inLandscapeMode;
-    private SendHuman sendHuman;
+    private SendItem sendItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,22 +23,20 @@ public class MainActivity extends AppCompatActivity{
             receiverFragment.buttonOff();
         }
 
-        sendHuman = new SendHuman() {
+        sendItem = new SendItem() {
             @Override
-            public void onSend(Human human) {
+            public void onSend(PurchaseItem item) {
                 if (inLandscapeMode) {
-                    receiverFragment.showData(human);
+                    receiverFragment.showData(item.getDetails());
                 } else {
                     Intent intent = new Intent(MainActivity.this, RecieverActivity.class);
-                    intent.putExtra("first", human.getFirstName());
-                    intent.putExtra("last", human.getLastName());
-                    intent.putExtra("age", human.getAge());
+                    intent.putExtra("details", item.getDetails());
                     startActivity(intent);
                 }
             }
         };
 
-        mainFragment.setSendHuman(sendHuman);
+        mainFragment.setSendItem(sendItem);
 
     }
 }

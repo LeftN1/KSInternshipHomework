@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context="com.keepsolid.ksinternshiphomework.MainActivity">
 
-
     <fragment
         android:id="@+id/fragment_main"
         android:name="com.keepsolid.ksinternshiphomework.MainFragment"

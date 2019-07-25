@@ -15,7 +15,7 @@ import android.widget.TextView;
  */
 public class ReceiverFragment extends Fragment {
 
-    private TextView showHumanView;
+    private TextView showItemView;
     private Button exitButton;
 
     public ReceiverFragment() {
@@ -27,7 +27,7 @@ public class ReceiverFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_receiver, container, false);
-        showHumanView = v.findViewById(R.id.show);
+        showItemView = v.findViewById(R.id.show);
         exitButton = v.findViewById(R.id.exit);
 
         exitButton.setOnClickListener(new View.OnClickListener() {
@@ -40,8 +40,8 @@ public class ReceiverFragment extends Fragment {
         return v;
     }
 
-    public void showData(Human human){
-        showHumanView.setText(human.toString());
+    public void showData(String details){
+        showItemView.setText(details);
     }
 
     public void buttonOff(){
