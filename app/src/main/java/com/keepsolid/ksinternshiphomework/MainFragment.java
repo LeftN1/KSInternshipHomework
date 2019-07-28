@@ -1,20 +1,36 @@
 package com.keepsolid.ksinternshiphomework;
 
 
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.design.widget.FloatingActionButton;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+
+import com.keepsolid.ksinternshiphomework.adapters.BookRecyclerAdapter;
+import com.keepsolid.ksinternshiphomework.api.ApiCallback;
+import com.keepsolid.ksinternshiphomework.api.RestClient;
+import com.keepsolid.ksinternshiphomework.listeners.OnBookRecyclerItemClickListener;
+import com.keepsolid.ksinternshiphomework.models.BookErrorItem;
+import com.keepsolid.ksinternshiphomework.models.BookItem;
+import com.keepsolid.ksinternshiphomework.models.BookResponse;
 
 import java.util.ArrayList;
+import java.util.Map;
+
+import retrofit2.Response;
 
 
 /**
@@ -22,11 +38,16 @@ import java.util.ArrayList;
  */
 public class MainFragment extends Fragment {
 
+    private final int MAX_RESULT = 40;
+
     private Toolbar toolbar;
-    private RecyclerView recyclerView;
-    ArrayList <PurchaseItem> items;
-    PurchaseAdapter adapter;
-    FloatingActionButton btn;
+    private RecyclerView recycler;
+    private EditText titleInput;
+    private AppCompatButton goButton;
+    private ProgressBar progressBar;
+
+    private ArrayList<BookItem> items;
+    private BookRecyclerAdapter adapter;
 
     private SendItem sendItem;
 
@@ -41,41 +62,79 @@ public class MainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
 
         toolbar = v.findViewById(R.id.toolbar);
-        toolbar.setTitle("Список покупок");
-
-        recyclerView = v.findViewById(R.id.rv_recycler);
-        btn = v.findViewById(R.id.fab_add);
+        toolbar.setTitle("Google Books");
 
         items = new ArrayList<>();
 
-        boolean checker;
-        for (int i = 0; i < 100; i++){
+        recycler = v.findViewById(R.id.rv_recycler);
+        titleInput = v.findViewById(R.id.et_title_input);
+        goButton = v.findViewById(R.id.btn_go);
+        progressBar = v.findViewById(R.id.pb_progress);
 
-            checker = (Math.random() > 0.4) ? false : true;
-
-            items.add(new PurchaseItem(checker, "покупка " + i, Units.PCS, Math.random(), Math.random()*10, "Lorem ipsum ist dolore " + i ));
-        }
-
-        adapter = new PurchaseAdapter(items, v.getContext());
-
-        adapter.setListener(new OnPurchaseItemClickListener() {
+        adapter = new BookRecyclerAdapter(items, v.getContext(), new OnBookRecyclerItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(View v, int position, Uri url) {
                 sendItem.onSend(adapter.getItems().get(position));
             }
         });
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
-        recyclerView.setAdapter(adapter);
+        recycler.setLayoutManager(new LinearLayoutManager(v.getContext()));
+        recycler.setAdapter(adapter);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (TextUtils.isEmpty(titleInput.getText().toString())) {
+                    titleInput.requestFocus();
+                } else {
+                    loadBooks(titleInput.getText().toString());
+                }
             }
         });
 
         return v;
+    }
+
+    private void loadBooks(String title) {
+        showProgressBlock();
+
+        RestClient.getInstance().getService().getBooks(title, MAX_RESULT).enqueue(new ApiCallback<BookResponse>() {
+
+            @Override
+            public void success(Response<BookResponse> response) {
+                items.clear();
+                items.addAll(response.body().getBookItems());
+                adapter.notifyDataSetChanged();
+                hideProgressBlock();
+            }
+
+            @Override
+            public void failure(BookErrorItem bookError) {
+                if (TextUtils.isEmpty(bookError.getDocumentation_url())) {
+                    makeErrorToast(bookError.getMessage());
+                } else {
+                    makeErrorToast(bookError.getMessage() + bookError.getDocumentation_url());
+                }
+                hideProgressBlock();
+            }
+        });
+    }
+
+    private void showProgressBlock() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    private void hideProgressBlock() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    private void makeErrorToast(String errorMessage) {
+        Toast.makeText(getView().getContext(), errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     @Override

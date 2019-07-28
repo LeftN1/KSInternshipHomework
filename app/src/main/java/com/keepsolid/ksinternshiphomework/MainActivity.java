@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.keepsolid.ksinternshiphomework.models.BookItem;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity{
 
     private MainFragment mainFragment;
@@ -20,17 +24,16 @@ public class MainActivity extends AppCompatActivity{
         mainFragment = (MainFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_main);
         if(inLandscapeMode){
             receiverFragment = (ReceiverFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_receiver);
-            receiverFragment.buttonOff();
         }
 
         sendItem = new SendItem() {
             @Override
-            public void onSend(PurchaseItem item) {
+            public void onSend(BookItem item) {
                 if (inLandscapeMode) {
-                    receiverFragment.showData(item.getDetails());
+                    receiverFragment.setItem(item);
+                    receiverFragment.showData();
                 } else {
-                    Intent intent = new Intent(MainActivity.this, RecieverActivity.class);
-                    intent.putExtra("details", item.getDetails());
+                    Intent intent = new Intent(Intent.ACTION_VIEW, item.getVolumeInfo().getPreviewLink());
                     startActivity(intent);
                 }
             }

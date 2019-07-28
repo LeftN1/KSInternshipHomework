@@ -1,6 +1,7 @@
 package com.keepsolid.ksinternshiphomework;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,14 +10,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.keepsolid.ksinternshiphomework.models.BookItem;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ReceiverFragment extends Fragment {
 
-    private TextView showItemView;
+    private TextView title;
+    private TextView authors;
+    private TextView description;
     private Button exitButton;
+    private BookItem item;
 
     public ReceiverFragment() {
         // Required empty public constructor
@@ -27,24 +33,43 @@ public class ReceiverFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_receiver, container, false);
-        showItemView = v.findViewById(R.id.show);
+        title = v.findViewById(R.id.title);
+        authors = v.findViewById(R.id.authors);
+        description = v.findViewById(R.id.description);
         exitButton = v.findViewById(R.id.exit);
+
+
 
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    getActivity().finish();
+                if(item != null) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, item.getVolumeInfo().getPreviewLink());
+                    startActivity(intent);
+                }
             }
         });
 
         return v;
     }
 
-    public void showData(String details){
-        showItemView.setText(details);
+    public void showData(){
+        if(item != null){
+            title.setText("title: " + item.getVolumeInfo().getTitle());
+
+            String authorsString = "author(s): ";
+            for(String s : item.getVolumeInfo().getAuthors()){
+                authorsString += s;
+                authorsString +="\n";
+            }
+
+            authors.setText(authorsString);
+            description.setText(item.getVolumeInfo().getDescription());
+        }
     }
 
-    public void buttonOff(){
-        exitButton.setVisibility(View.INVISIBLE);
+    public void setItem(BookItem item){
+        this.item = item;
     }
+
 }
