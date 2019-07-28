@@ -1,6 +1,7 @@
 package com.keepsolid.ksinternshiphomework.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,26 +11,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.keepsolid.ksinternshiphomework.R;
 import com.keepsolid.ksinternshiphomework.listeners.OnBookRecyclerItemClickListener;
 import com.keepsolid.ksinternshiphomework.models.BookItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapter.ViewHolder> {
 
     private ArrayList<BookItem> items;
-    private Context ctx;
     private OnBookRecyclerItemClickListener listener;
 
-    public BookRecyclerAdapter(ArrayList<BookItem> items, Context ctx) {
+    public BookRecyclerAdapter(ArrayList<BookItem> items) {
         this.items = items;
-        this.ctx = ctx;
     }
 
-    public BookRecyclerAdapter(ArrayList<BookItem> items, Context ctx, OnBookRecyclerItemClickListener listener) {
+    public BookRecyclerAdapter(ArrayList<BookItem> items, OnBookRecyclerItemClickListener listener) {
         this.items = items;
-        this.ctx = ctx;
         this.listener = listener;
     }
 
@@ -53,10 +53,14 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
 
     @Override
     public void onBindViewHolder(BookRecyclerAdapter.ViewHolder holder, int position) {
-        holder.description.setText(items.get(position).getVolumeInfo().getDescription());
-        holder.name.setText(items.get(position).getVolumeInfo().getTitle());
-        Glide.with(holder.avatar).load(items.get(position).getVolumeInfo().getImageLinks().getThumbnail()).placeholder(R.drawable.ic_account_multiple_grey600_24dp).into(holder.avatar);
+        holder.title.setText(items.get(position).getVolumeInfo().getTitle());
 
+        //Добавить авторов не получилось. Наверное из-за того, что API выдает их в виде списка, и при объединении в строку тратится много ресурсов.(?)
+
+        holder.description.setText(items.get(position).getVolumeInfo().getDescription());
+        Uri img = items.get(position).getVolumeInfo().getImageLinks().getThumbnail();
+        //Glide.with(holder.thumbnail).load(img).placeholder(R.drawable.ic_account_multiple_grey600_24dp).into(holder.thumbnail);
+        Picasso.with(holder.thumbnail.getContext()).load(img).placeholder(R.drawable.ic_account_multiple_grey600_24dp).into(holder.thumbnail);
     }
 
     @Override
@@ -74,18 +78,16 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name;
+        TextView title;
         TextView description;
-        AppCompatImageView avatar;
+        AppCompatImageView thumbnail;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            Log.e("TaskRecyclerAdapter", "finding views!");
-
-            description = itemView.findViewById(R.id.tv_repo_desc);
-            name = itemView.findViewById(R.id.tv_repo_name);
-            avatar = itemView.findViewById(R.id.iv_user_avatar);
+            title = itemView.findViewById(R.id.tv_book_title);
+            description = itemView.findViewById(R.id.tv_description);
+            thumbnail = itemView.findViewById(R.id.iv_thumbnail);
 
         }
     }

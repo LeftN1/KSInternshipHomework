@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/fragment_main"
-        android:name="com.keepsolid.ksinternshiphomework.MainFragment"
+        android:name="com.keepsolid.ksinternshiphomework.fragments.MainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

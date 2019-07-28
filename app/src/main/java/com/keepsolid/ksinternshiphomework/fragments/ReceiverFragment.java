@@ -1,4 +1,4 @@
-package com.keepsolid.ksinternshiphomework;
+package com.keepsolid.ksinternshiphomework.fragments;
 
 
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.keepsolid.ksinternshiphomework.R;
 import com.keepsolid.ksinternshiphomework.models.BookItem;
 
 

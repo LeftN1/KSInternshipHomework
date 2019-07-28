@@ -1,4 +1,4 @@
-package com.keepsolid.ksinternshiphomework;
+package com.keepsolid.ksinternshiphomework.fragments;
 
 
 import android.net.Uri;
@@ -19,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
+import com.keepsolid.ksinternshiphomework.R;
+import com.keepsolid.ksinternshiphomework.models.SendItem;
 import com.keepsolid.ksinternshiphomework.adapters.BookRecyclerAdapter;
 import com.keepsolid.ksinternshiphomework.api.ApiCallback;
 import com.keepsolid.ksinternshiphomework.api.RestClient;
@@ -28,7 +30,6 @@ import com.keepsolid.ksinternshiphomework.models.BookItem;
 import com.keepsolid.ksinternshiphomework.models.BookResponse;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import retrofit2.Response;
 
@@ -71,7 +72,7 @@ public class MainFragment extends Fragment {
         goButton = v.findViewById(R.id.btn_go);
         progressBar = v.findViewById(R.id.pb_progress);
 
-        adapter = new BookRecyclerAdapter(items, v.getContext(), new OnBookRecyclerItemClickListener() {
+        adapter = new BookRecyclerAdapter(items, new OnBookRecyclerItemClickListener() {
             @Override
             public void onItemClick(View v, int position, Uri url) {
                 sendItem.onSend(adapter.getItems().get(position));

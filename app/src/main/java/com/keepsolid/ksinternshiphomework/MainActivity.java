@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.keepsolid.ksinternshiphomework.fragments.MainFragment;
+import com.keepsolid.ksinternshiphomework.fragments.ReceiverFragment;
 import com.keepsolid.ksinternshiphomework.models.BookItem;
-
-import java.util.ArrayList;
+import com.keepsolid.ksinternshiphomework.models.SendItem;
 
 public class MainActivity extends AppCompatActivity{
 

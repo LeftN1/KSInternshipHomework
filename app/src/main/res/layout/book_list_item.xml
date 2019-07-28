@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="72dp">
+    android:layout_height="98dp">
 
     <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/iv_user_avatar"
+        android:id="@+id/iv_thumbnail"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_alignParentStart="true"
@@ -17,28 +17,28 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_toEndOf="@id/iv_user_avatar"
+        android:layout_toEndOf="@id/iv_thumbnail"
         android:orientation="vertical"
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
 
         <TextView
-            android:id="@+id/tv_repo_name"
+            android:id="@+id/tv_book_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="1"
-            android:text="SomeRepo"
+            android:text="Title"
             android:textSize="18dp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_repo_desc"
+            android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="SomeDescription" />
+            android:text="Description" />
     </LinearLayout>
 
 

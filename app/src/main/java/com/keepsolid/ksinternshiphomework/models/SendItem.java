@@ -1,4 +1,4 @@
-package com.keepsolid.ksinternshiphomework;
+package com.keepsolid.ksinternshiphomework.models;
 
 import com.keepsolid.ksinternshiphomework.models.BookItem;
 
