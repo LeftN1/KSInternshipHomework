@@ -23,6 +23,8 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
 
     private ArrayList<BookItem> items;
     private OnBookRecyclerItemClickListener listener;
+    Uri img = Uri.EMPTY;
+
 
     public BookRecyclerAdapter(ArrayList<BookItem> items) {
         this.items = items;
@@ -58,9 +60,18 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         //Добавить авторов не получилось. Наверное из-за того, что API выдает их в виде списка, и при объединении в строку тратится много ресурсов.(?)
 
         holder.description.setText(items.get(position).getVolumeInfo().getDescription());
-        Uri img = items.get(position).getVolumeInfo().getImageLinks().getThumbnail();
-        //Glide.with(holder.thumbnail).load(img).placeholder(R.drawable.ic_account_multiple_grey600_24dp).into(holder.thumbnail);
-        Picasso.with(holder.thumbnail.getContext()).load(img).placeholder(R.drawable.ic_account_multiple_grey600_24dp).into(holder.thumbnail);
+
+        // Api Google Books, оказывается, не всегда выдает ссылки на изображения, создаются инстансы без imageLinks.
+        // При попытке обратится .getVolumeInfo().getImageLinks().getThumbnail() возникает null pointer exception
+        try {
+            img = items.get(position).getVolumeInfo().getImageLinks().getThumbnail();
+            Glide.with(holder.thumbnail).load(img).placeholder(R.drawable.not_found).into(holder.thumbnail);
+        }
+        catch (NullPointerException e){
+            img = Uri.parse("https://user-images.githubusercontent.com/24848110/33519396-7e56363c-d79d-11e7-969b-09782f5ccbab.png");
+            Glide.with(holder.thumbnail).load(img).placeholder(R.drawable.not_found).into(holder.thumbnail);
+        }
+        //Picasso.with(holder.thumbnail.getContext()).load(img);//.placeholder(R.drawable.ic_account_multiple_grey600_24dp).into(holder.thumbnail);
     }
 
     @Override
