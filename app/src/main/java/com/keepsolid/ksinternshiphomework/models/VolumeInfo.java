@@ -25,6 +25,14 @@ public class VolumeInfo {
         return authors;
     }
 
+    public String getAuthorsString(){
+        StringBuilder res = new StringBuilder();
+        res.append(authors.toString());
+        res.replace(0,1,"");
+        res.replace(authors.toString().length()-1,authors.toString().length(),"");
+        return authors.toString();
+    }
+
     public String getAuthorString(){
         StringBuilder auth = new StringBuilder();
         for (String s : authors){
