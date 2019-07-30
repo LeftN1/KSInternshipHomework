@@ -133,6 +133,7 @@ public class MainFragment extends Fragment {
     }
 
     private void saveItems(){
+        mDatabase.delete(BookTable.NAME,null,null);
         for(BookItem bookItem : items){
             mDatabase.insert(BookTable.NAME, null, getContentValues(bookItem));
         }
