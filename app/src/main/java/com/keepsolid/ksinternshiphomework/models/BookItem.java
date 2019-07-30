@@ -9,7 +9,11 @@ public class BookItem {
     private String id;
     private VolumeInfo volumeInfo;
 
-    public BookItem(String id, VolumeInfo volumeInfo, Uri selfLink) {
+    public BookItem(String id){
+        this.id = id;
+    }
+
+    public BookItem(String id, VolumeInfo volumeInfo) {
         this.id = id;
         this.volumeInfo = volumeInfo;
     }

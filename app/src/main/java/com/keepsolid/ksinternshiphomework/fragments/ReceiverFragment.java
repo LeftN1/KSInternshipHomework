@@ -58,11 +58,7 @@ public class ReceiverFragment extends Fragment {
         if(item != null){
             title.setText("title: " + item.getVolumeInfo().getTitle());
 
-            String authorsString = "author(s): ";
-            for(String s : item.getVolumeInfo().getAuthors()){
-                authorsString += s;
-                authorsString +="\n";
-            }
+            String authorsString = "author(s): " + item.getVolumeInfo().getAuthorString();
 
             authors.setText(authorsString);
             description.setText(item.getVolumeInfo().getDescription());

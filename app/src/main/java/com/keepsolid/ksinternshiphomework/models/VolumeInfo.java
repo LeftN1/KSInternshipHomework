@@ -10,6 +10,7 @@ public class VolumeInfo {
 
     private String title;
     private ArrayList<String> authors;
+    private String authorsString; // Это конечно всё костыль, но работает
     private String description;
     private ImageLinks imageLinks;
     private Uri previewLink;
@@ -21,31 +22,41 @@ public class VolumeInfo {
         this.imageLinks = imageLinks;
     }
 
-    public ArrayList<String> getAuthors() {
-        return authors;
+    public VolumeInfo(String title, String authorsS, String description, String selfUrl, String thumbUrl) {
+        this.title = title;
+        this.authorsString = authorsS;
+        this.description = description;
+        this.previewLink = Uri.parse(selfUrl);
+        this.imageLinks = new ImageLinks(Uri.EMPTY, Uri.parse(thumbUrl));
     }
+
+
 
     public String getAuthorString(){
         StringBuilder res = new StringBuilder();
-        res.append(authors.toString());
+        res.append(getAuthors().toString());
         res.replace(0,1,"");
         res.replace(authors.toString().length()-2,authors.toString().length()-1,"");
-        return res.toString();
+        this.authorsString = res.toString();
+        return authorsString;
     }
 
-    public String getAuthorStringTable(){
-        StringBuilder auth = new StringBuilder();
-        for (String s : authors){
-            auth.append(s);
-            auth.append(", ");
+
+
+    public ArrayList<String> getAuthors() {
+        if(authors == null) {
+            this.authors = new ArrayList<>();
+            this.authors.add("Unknown Author");
         }
-        auth.replace(auth.length()-2, auth.length()-1,"");
-        String res = auth.toString();
-        return res;
+        return authors;
     }
 
     public void setAuthors(ArrayList<String> authors) {
         this.authors = authors;
+    }
+
+    public void setAuthorsString(String s){
+
     }
 
     public String getDescription() {
@@ -57,6 +68,9 @@ public class VolumeInfo {
     }
 
     public ImageLinks getImageLinks() {
+        if(imageLinks == null){
+            this.imageLinks = new ImageLinks(Uri.EMPTY, Uri.EMPTY);
+        }
         return imageLinks;
     }
 

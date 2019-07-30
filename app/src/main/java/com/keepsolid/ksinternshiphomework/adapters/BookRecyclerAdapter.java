@@ -20,8 +20,6 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
     private ArrayList<BookItem> items;
     private OnBookRecyclerItemClickListener listener;
     Uri img = Uri.EMPTY;
-    String sAuthors;
-
 
     public BookRecyclerAdapter(ArrayList<BookItem> items) {
         this.items = items;
@@ -56,25 +54,11 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
 
         holder.description.setText(items.get(position).getVolumeInfo().getDescription());
 
-        // Api Google Books, оказывается, не всегда выдает ссылки на изображения, создаются инстансы без imageLinks.
-        // При попытке обратится .getVolumeInfo().getImageLinks().getThumbnail() возникает null pointer exception
-        if(items.get(position).getVolumeInfo().getImageLinks() != null){
-            img = items.get(position).getVolumeInfo().getImageLinks().getThumbnail();
-        }
-        else {
-            img = Uri.EMPTY;
-        }
+        img = items.get(position).getVolumeInfo().getImageLinks().getThumbnail();
         Glide.with(holder.thumbnail).load(img).placeholder(R.drawable.not_found).into(holder.thumbnail);
         //Picasso.with(holder.thumbnail.getContext()).load(img);//.placeholder(R.drawable.ic_account_multiple_grey600_24dp).into(holder.thumbnail);
 
-        //Авторов тоже не всегда выдает((
-        if(items.get(position).getVolumeInfo().getAuthors() != null){
-            sAuthors = items.get(position).getVolumeInfo().getAuthorString();
-        }
-        else {
-            sAuthors = "Unknown";
-        }
-        holder.authors.setText(sAuthors);
+        holder.authors.setText(items.get(position).getVolumeInfo().getAuthorString());
     }
 
     @Override

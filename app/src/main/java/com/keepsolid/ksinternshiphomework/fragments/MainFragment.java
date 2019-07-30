@@ -1,7 +1,9 @@
 package com.keepsolid.ksinternshiphomework.fragments;
 
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
@@ -23,6 +25,9 @@ import android.widget.Toast;
 
 import com.keepsolid.ksinternshiphomework.R;
 import com.keepsolid.ksinternshiphomework.database.BookDBHelper;
+import com.keepsolid.ksinternshiphomework.database.BookDBSchema;
+import com.keepsolid.ksinternshiphomework.database.BookDBSchema.BookTable;
+import com.keepsolid.ksinternshiphomework.database.MyCursor;
 import com.keepsolid.ksinternshiphomework.models.SendItem;
 import com.keepsolid.ksinternshiphomework.adapters.BookRecyclerAdapter;
 import com.keepsolid.ksinternshiphomework.api.ApiCallback;
@@ -33,6 +38,7 @@ import com.keepsolid.ksinternshiphomework.models.BookItem;
 import com.keepsolid.ksinternshiphomework.models.BookResponse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Response;
 
@@ -71,23 +77,35 @@ public class MainFragment extends Fragment {
         toolbar = v.findViewById(R.id.toolbar);
         toolbar.setTitle("Google Books");
 
-        items = new ArrayList<>();
+
+
         mDatabase = new BookDBHelper(v.getContext()).getWritableDatabase();
 
         recycler = v.findViewById(R.id.rv_recycler);
         titleInput = v.findViewById(R.id.et_title_input);
         goButton = v.findViewById(R.id.btn_go);
         progressBar = v.findViewById(R.id.pb_progress);
-
-        adapter = new BookRecyclerAdapter(items, new OnBookRecyclerItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position, Uri url) {
-                sendItem.onSend(adapter.getItems().get(position));
-            }
-        });
-
         recycler.setLayoutManager(new LinearLayoutManager(v.getContext()));
-        recycler.setAdapter(adapter);
+
+//        items = new ArrayList<>();
+        items = getBooksFromDB();
+
+        if (adapter == null) {
+            adapter = new BookRecyclerAdapter(items, new OnBookRecyclerItemClickListener() {
+                @Override
+                public void onItemClick(View v, int position, Uri url) {
+                    sendItem.onSend(adapter.getItems().get(position));
+                }
+            });
+            recycler.setAdapter(adapter);
+        }
+        else {
+            adapter.setItems(items);
+            adapter.notifyDataSetChanged();
+        }
+
+
+
 
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +121,59 @@ public class MainFragment extends Fragment {
         return v;
     }
 
+    private static ContentValues getContentValues(BookItem bookItem){
+        ContentValues values = new ContentValues();
+        values.put(BookTable.cols.ID, bookItem.getId());
+        values.put(BookTable.cols.TITLE, bookItem.getVolumeInfo().getTitle());
+        values.put(BookTable.cols.AUTHORS, bookItem.getVolumeInfo().getAuthorString());
+        values.put(BookTable.cols.DESCRIPTION, bookItem.getVolumeInfo().getDescription());
+        values.put(BookTable.cols.URL, bookItem.getVolumeInfo().getPreviewLink().toString());
+        values.put(BookTable.cols.THUMBNAIL, bookItem.getVolumeInfo().getImageLinks().getThumbnail().toString());
+        return values;
+    }
+
+    private void saveItems(){
+        for(BookItem bookItem : items){
+            mDatabase.insert(BookTable.NAME, null, getContentValues(bookItem));
+        }
+    }
+
+    private void updateSavedBook(BookItem bookItem){
+        String id = bookItem.getId();
+        ContentValues values = getContentValues(bookItem);
+
+        mDatabase.update(BookTable.NAME, values, BookTable.cols.ID + " = ?", new String[]{id});
+    }
+
+    private MyCursor queryBooks(String whereClause, String[] whereArgs){
+        Cursor cursor = mDatabase.query(
+                BookTable.NAME,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+        return new MyCursor(cursor);
+    }
+
+    public ArrayList<BookItem> getBooksFromDB(){
+        ArrayList<BookItem> bookItems = new ArrayList<>();
+        MyCursor cursor = queryBooks(null, null);
+
+        try{
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                bookItems.add(cursor.getBook());
+                cursor.moveToNext();
+            }
+        }finally{
+            cursor.close();
+        }
+            return bookItems;
+    }
+
     private void loadBooks(String title) {
         showProgressBlock();
 
@@ -113,6 +184,7 @@ public class MainFragment extends Fragment {
                 items.clear();
                 items.addAll(response.body().getBookItems());
                 adapter.notifyDataSetChanged();
+                saveItems();
                 hideProgressBlock();
             }
 
