@@ -1,21 +1,17 @@
 package com.keepsolid.ksinternshiphomework.adapters;
 
-import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.keepsolid.ksinternshiphomework.R;
 import com.keepsolid.ksinternshiphomework.listeners.OnBookRecyclerItemClickListener;
 import com.keepsolid.ksinternshiphomework.models.BookItem;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -73,7 +69,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
 
         //Авторов тоже не всегда выдает((
         if(items.get(position).getVolumeInfo().getAuthors() != null){
-            sAuthors = items.get(position).getVolumeInfo().getAuthorsString();
+            sAuthors = items.get(position).getVolumeInfo().getAuthorString();
         }
         else {
             sAuthors = "Unknown";
@@ -108,7 +104,6 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
             authors = itemView.findViewById(R.id.tv_authors);
             description = itemView.findViewById(R.id.tv_description);
             thumbnail = itemView.findViewById(R.id.iv_thumbnail);
-
         }
     }
 

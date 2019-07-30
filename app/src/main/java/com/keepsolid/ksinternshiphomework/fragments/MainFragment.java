@@ -1,6 +1,8 @@
 package com.keepsolid.ksinternshiphomework.fragments;
 
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 
 import com.keepsolid.ksinternshiphomework.R;
+import com.keepsolid.ksinternshiphomework.database.BookDBHelper;
 import com.keepsolid.ksinternshiphomework.models.SendItem;
 import com.keepsolid.ksinternshiphomework.adapters.BookRecyclerAdapter;
 import com.keepsolid.ksinternshiphomework.api.ApiCallback;
@@ -48,9 +51,12 @@ public class MainFragment extends Fragment {
     private ProgressBar progressBar;
 
     private ArrayList<BookItem> items;
+    private SQLiteDatabase mDatabase;
     private BookRecyclerAdapter adapter;
 
     private SendItem sendItem;
+
+
 
     public MainFragment() {
         // Required empty public constructor
@@ -66,6 +72,7 @@ public class MainFragment extends Fragment {
         toolbar.setTitle("Google Books");
 
         items = new ArrayList<>();
+        mDatabase = new BookDBHelper(v.getContext()).getWritableDatabase();
 
         recycler = v.findViewById(R.id.rv_recycler);
         titleInput = v.findViewById(R.id.et_title_input);
